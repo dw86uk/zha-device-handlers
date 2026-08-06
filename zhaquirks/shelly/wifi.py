@@ -172,7 +172,41 @@ class ShellyInputOnOffCluster(EventableCluster, OnOff):
 
 (
     QuirkBuilder("Shelly", "2PM")
-    .applies_to("Shelly", "EM Mini")
+    .device_class(ShellyCustomProfileDevice)
+    .replaces(ShellyWiFiSetupCluster, endpoint_id=SHELLY_WIFI_SETUP_ENDPOINT_ID)
+    .replaces(
+        ShellyInputOnOffCluster,
+        endpoint_id=3,
+        cluster_type=ClusterType.Client,
+    )
+    .binary_sensor(
+        attribute_name=OnOff.AttributeDefs.on_off.name,
+        cluster_id=OnOff.cluster_id,
+        endpoint_id=3,
+        cluster_type=ClusterType.Client,
+        entity_type=EntityType.STANDARD,
+        translation_key="input",
+        fallback_name="Input",
+    )
+    .replaces(
+        ShellyInputOnOffCluster,
+        endpoint_id=4,
+        cluster_type=ClusterType.Client,
+    )
+    .binary_sensor(
+        attribute_name=OnOff.AttributeDefs.on_off.name,
+        cluster_id=OnOff.cluster_id,
+        endpoint_id=4,
+        cluster_type=ClusterType.Client,
+        entity_type=EntityType.STANDARD,
+        translation_key="input",
+        fallback_name="Input",
+    )
+    .add_to_registry()
+)
+
+(
+    QuirkBuilder("Shelly", "EM Mini")
     .device_class(ShellyCustomProfileDevice)
     .replaces(ShellyWiFiSetupCluster, endpoint_id=SHELLY_WIFI_SETUP_ENDPOINT_ID)
     .add_to_registry()
